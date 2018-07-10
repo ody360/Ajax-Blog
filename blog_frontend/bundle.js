@@ -1,0 +1,1 @@
+console.error("Error: Cannot find module '/home/hedim360/Documents/Q2/AJAX-Blog/blog_frontend/scripts/main.js' from '/home/hedim360/Documents/Q2/AJAX-Blog/blog_frontend'");
