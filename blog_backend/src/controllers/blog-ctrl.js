@@ -9,6 +9,7 @@ function getBlogs(req, res, next) {
 }
 
 function getBlog(req, res, next) {
+  console.log('GET REQ RECEIVED!')
   const data = model.getBlog(req.params.id)
 
   if(data.errors) {
@@ -21,6 +22,7 @@ function getBlog(req, res, next) {
 
 
 function postBlogs(req, res,next) {
+  console.log('POST REQ RECEIVED')
   const data = model.postBlogs(req.body)
 
   if(data.errors) {
