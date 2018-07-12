@@ -39,7 +39,7 @@ function getBlog(id) {
     return err
   }
 
-  return blogs
+  return blog
 
 }
 
