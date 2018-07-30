@@ -1,13 +1,16 @@
-//console.log('JS Working')
+
 const URL = 'https://sheltered-cliffs-90193.herokuapp.com/ajaxblog/'
 const PostURL = 'https://sheltered-cliffs-90193.herokuapp.com/ajaxblog/'
+const template = require('./templates')
 
 const createBtn = document.querySelector('.createBlogBtn')
 const form = document.querySelector('.form')
 const blogForm = document.querySelector('.newBlog')
 const blogContent = document.querySelector('#nav-tabContent')
+
 let currentData = {}
 let mainForm = document.querySelector('.mainContent')
+
 
 
 window.onload = function() {
@@ -33,6 +36,7 @@ function refreshBlog() {
 }
 
 function displaySideBar(blogs) {
+  console.log('IN DISPLAY SIDEB: ', blogs)
   currentData = blogs
   console.log('CURRENT DATA IS: ===>', currentData)
   let sideBar = document.querySelector('.sideBar')
@@ -87,17 +91,7 @@ function displayMain(blogs) {
 function createForm(){
   let mainForm = document.querySelector('.mainContent')
 
-  mainForm.innerHTML = `
-  \<form id="newBlogPost" action="" method="post">
-    \<div class"form-group submit">
-      \<label for='formTitle'>Title\</label>
-      \<input type='text' class='form-control' id='formTitle' placeholder='blog title' required>
-
-      \<label for='blogContent'>Content\</label>
-      \<textarea class='form-control' id='blogContent' rows='3'>\</textarea>
-      \<button type='submit' class='btn btn-large'>Create New Post\</button>
-    \</div>
-  \</form>`
+  mainForm.innerHTML = template.createBlogPost() 
 
 
   const blogForm = document.querySelector('#newBlogPost')
@@ -113,35 +107,46 @@ function updateEntry() {
   let id = selection.id.slice(5,11)
   let mainForm = document.querySelector('.mainContent')
 
-  console.log(`${URL}${id}`)
+  console.log(`IN UPDATE : ${URL}${id}`)
 
   axios.get(`${URL}${id}`)
     .then(resp => resp.data)
     .then(updateForm)
+  //  .then(updateData)
 
   }
 
 function updateForm(blog) {
   console.log('IN UPDATE WITH DATA: ', blog)
 
-  mainForm.innerHTML = `
-  \<form id="newBlogPost" action="" method="post">
-    \<div class"form-group submit">
-      \<label for='formTitle'>${blog.title}\</label>
-      \<input type='text' class='form-control' id='${blog.id}' placeholder='blog title' required>
+  mainForm.innerHTML = template.createNewBlogPost(blog)
 
-      \<label for='blogContent'>Content\</label>
-      \<textarea class='form-control' id='${blogContent}' rows='3'>${blog.content}\</textarea>
-      \<button type='submit' class='btn btn-large'>Update Post\</button>
-    \</div>
-  \</form>`
+  const blogForm = document.querySelector('#newBlogPost')
 
+  blogForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    updateData(blog)
+  })
 
-
-  console.log(`IN UPDATE: ${URL}${id}`)
-//  return axios.put(`${URL}${id}`)
-
+  return blog
 }
+
+function updateData(blog) {
+
+ 
+    let blogTitle = document.querySelector('#formTitle').value
+    let blogContent = document.querySelector('#blogContent').value
+
+
+ 
+
+  axios.put(`${PostURL}${blog.id}`, {
+      title: blogTitle,
+      content: blogContent,
+    }).then(resp => resp.data.message)
+    .then(refreshBlog)
+}
+
 
 
 
